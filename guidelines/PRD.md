@@ -1,143 +1,216 @@
-# Stickerbook -- Product Requirements Document
+# Lap Slaps -- Product Requirements Document
 
 ## 1. Overview
 
-Stickerbook is a lightweight interactive web app for designing a custom
-laptop cover using digital stickers.
+Lap Slaps is an immersive, scene-based web app where users design a
+custom laptop cover using digital stickers.
 
-Users drag stickers onto a MacBook screen, arrange them, and export the
-final result as a high-quality PNG.
+Users interact with a central MacBook object placed in a full-screen
+environment. UI elements float above the scene, while stickers behave
+like physical objects placed on the laptop surface.
 
 ### Goals
 
--   Fast interaction with zero learning curve\
--   Visually clean and satisfying UI\
--   Reliable save and export flow\
--   Shareable output
+-   Fast, intuitive interaction\
+-   Strong sense of depth and physicality\
+-   Playful but polished experience\
+-   High-quality export output
 
 ------------------------------------------------------------------------
 
-## 2. Core Features
+## 2. Core Experience Model
 
-### 2.1 Canvas Experience
+The app is not a traditional layout. It is a layered interaction space.
+
+### Layer System
+
+1.  Background (immersive environment)\
+2.  Laptop (primary interaction surface)\
+3.  Stickers (interactive objects above laptop)\
+4.  UI (floating controls above everything)
+
+------------------------------------------------------------------------
+
+## 3. Core Features
+
+### 3.1 Laptop Surface (Primary Canvas)
 
 -   Centered MacBook Pro mockup\
--   Screen area is the only valid drop zone\
--   Subtle grid background inside screen\
--   Label: "Drop stickers here" (hidden after first sticker)
+-   This is the ONLY valid interaction surface\
+-   Stickers can only exist within laptop bounds
+
+#### Visual Requirements
+
+-   Strong outer shadow (depth)\
+-   Subtle surface gradient (top lighter, bottom darker)\
+-   Slight edge highlight
 
 #### Constraints
 
--   Stickers cannot leave screen bounds\
--   Drop outside screen cancels action\
--   All transforms must clamp within screen
+-   Stickers cannot leave laptop bounds\
+-   All transforms must clamp within surface
 
 ------------------------------------------------------------------------
 
-### 2.2 Sticker Library
+### 3.2 Sticker Tray (Bottom Dock)
 
-Left sidebar (\~320px)
+#### Structure
+
+-   Floating glass-style container\
+-   Positioned at bottom of screen
 
 #### Contents
 
--   Title: "Stickers"\
--   Search input: "Search stickers..."\
--   Category chips:
+-   Category row (horizontal)
     -   All\
+    -   Uploads\
+    -   Trending\
+    -   Design\
+    -   Code\
+    -   Products\
+    -   AI\
     -   Emoji\
-    -   Travel\
-    -   Food\
-    -   Icons\
-    -   Shapes\
--   Grid of 24 sticker thumbnails
+    -   Quotes
+-   Sticker rail (horizontal scroll)\
+-   Upload tile (far right, secondary emphasis)
 
-#### Sticker Format
+#### Behavior
 
--   Inline SVG only\
--   No remote images (prevents canvas tainting)
+-   Horizontal scroll (trackpad + drag)\
+-   Hover → slight scale + lift\
+-   Drag → immediate pickup
 
-#### Data Model
+#### Visual Style
 
-``` ts
-export type StickerCategory =
-  | "Emoji"
-  | "Travel"
-  | "Food"
-  | "Icons"
-  | "Shapes"
-
-export type StickerLibraryItem = {
-  id: string
-  name: string
-  category: StickerCategory
-  svg: string
-}
-```
+-   Glass effect (blur + transparency)\
+-   Subtle top edge highlight\
+-   Low visual weight (must not compete with canvas)
 
 ------------------------------------------------------------------------
 
-### 2.3 Sticker Interactions
+### 3.3 Sticker Interactions
 
 Users can:
 
--   Drag from library → drop on canvas\
--   Select sticker (click)\
--   Move (drag)\
--   Resize (corner handles)\
--   Rotate (rotation handle)\
+-   Drag from tray → drop on laptop\
+-   Select (click)\
+-   Move\
+-   Resize\
+-   Rotate\
 -   Duplicate\
 -   Delete\
 -   Change layer order
 
-#### Constraints
+------------------------------------------------------------------------
 
--   Min size: 24px\
--   Max size: 240px\
--   Movement constrained to screen bounds\
--   Rotation snaps every 15° when Shift is held
+### 3.4 Sticker Physics & Motion
 
-#### Duplicate Behavior
+Stickers must feel physical.
 
--   Offset by (12px, 12px)\
--   New sticker gets highest zIndex
+#### On Select (Peel Effect)
+
+-   Scale: `1 → 1.06`\
+-   TranslateY: `0 → -4px`\
+-   Slight rotation (±2deg optional)\
+-   Shadow increases
+
+#### Wave Transition
+
+-   Radial ripple distortion from click point\
+-   Expands and fades (\~300ms)
+
+#### Selected State
+
+-   Slight elevation maintained\
+-   Soft shadow\
+-   Clear visual priority
 
 ------------------------------------------------------------------------
 
-### 2.4 Selection UI
+### 3.5 Drag Behavior
 
-When a sticker is selected:
+#### Start
 
--   Show bounding box\
--   Show resize handles\
--   Show rotate handle
+-   Sticker lifts immediately\
+-   Cursor becomes grabbing
 
-#### Floating Toolbar
+#### While Dragging
+
+-   Sticker follows pointer\
+-   Slight tilt or smoothing allowed\
+-   Must remain inside bounds
+
+#### Drop
+
+-   Bounce animation:
+    -   scale: `1.06 → 0.98 → 1`\
+    -   shadow compress → expand\
+-   Duration: \~150ms
+
+------------------------------------------------------------------------
+
+### 3.6 Selection UI
+
+When selected:
+
+-   Bounding box\
+-   Resize handles\
+-   Rotate handle
+
+#### Selection Ring
+
+-   Subtle dashed or glow ring\
+-   Slight blur\
+-   Animated on entry (fade + scale)
+
+------------------------------------------------------------------------
+
+### 3.7 Floating Toolbar
+
+-   Appears near selected sticker\
+-   Must feel attached, not detached
+
+#### Actions
 
 -   Bring forward\
 -   Send backward\
 -   Duplicate\
 -   Delete
 
-Toolbar follows selected sticker position.
+#### Behavior
+
+-   Small entrance animation (scale + fade)\
+-   Positioned close to sticker
 
 ------------------------------------------------------------------------
 
-### 2.5 Clear Canvas
+### 3.8 Top Bar (Floating UI)
 
--   Bottom-right button\
--   Opens confirmation dialog
+#### Contents
+
+-   Logo\
+-   My Slaps\
+-   Trending\
+-   Export button
 
 #### Behavior
 
--   Confirm → removes all stickers\
--   Reset internal state\
--   Clear saved state (optional toggle)
+-   Floating glass style\
+-   Low visual weight\
+-   Must not compete with canvas
 
 ------------------------------------------------------------------------
 
-## 3. State Management
+### 3.9 Clear / Shuffle
 
-### 3.1 Canvas State Model
+-   Floating control near top\
+-   Secondary importance
+
+------------------------------------------------------------------------
+
+## 4. State Management
+
+### 4.1 Canvas State Model
 
 ``` ts
 export type PlacedSticker = {
@@ -155,279 +228,130 @@ export type PlacedSticker = {
 
 ------------------------------------------------------------------------
 
-### 3.2 Global Store (Zustand)
+### 4.2 Global Store
 
-State domains:
-
--   placedStickers: PlacedSticker\[\]\
--   selectedStickerId: string \| null\
--   activeCategory: string\
--   searchQuery: string\
--   isDragging: boolean\
--   toastMessage: string \| null
+-   placedStickers\
+-   selectedStickerId\
+-   activeCategory\
+-   isDragging\
+-   UI states
 
 ------------------------------------------------------------------------
 
-### 3.3 Derived State
+## 5. Save System
 
--   sortedStickers (by zIndex)\
--   filteredLibraryItems (search + category)\
--   hasSavedState
+### Save
 
-------------------------------------------------------------------------
-
-## 4. Save System
-
-### 4.1 Save Action
-
-Top bar button: "Save"
-
-#### Behavior
-
--   Serialize placedStickers\
--   Store in localStorage
+-   Stores state in localStorage\
+-   Toast feedback
 
 Key: stickerbook:canvas:v1
 
--   Show toast: "Saved"
+------------------------------------------------------------------------
+
+### Restore
+
+-   Prompt on load\
+-   Restore or dismiss
 
 ------------------------------------------------------------------------
 
-### 4.2 Restore State
+## 6. Export System
 
-On app load:
+### Export PNG
 
-If saved state exists:
+-   Includes:
+    -   Background\
+    -   Laptop\
+    -   Stickers
 
--   Show prompt: "Restore last design?"
+### Rendering
 
-Actions: - Restore → hydrate state\
-- Dismiss → ignore
+-   Offscreen canvas\
+-   2x resolution\
+-   Draw order:
+    1.  Background\
+    2.  Laptop\
+    3.  Stickers
 
 ------------------------------------------------------------------------
 
-### 4.3 Storage Format
+## 7. Motion System
 
-``` json
-{
-  "version": 1,
-  "stickers": []
-}
+### Principles
+
+-   Fast\
+-   Responsive\
+-   Slightly expressive\
+-   Never slow
+
+------------------------------------------------------------------------
+
+### Timing
+
+-   Lift: \~120ms\
+-   Ripple: \~300ms\
+-   Drop: \~150ms
+
+------------------------------------------------------------------------
+
+### Easing
+
+``` css
+cubic-bezier(0.2, 0.8, 0.2, 1)
 ```
 
 ------------------------------------------------------------------------
 
-## 5. Export System
+## 8. Depth System
 
-### 5.1 Export PNG
+### Layers
 
-Top bar button: "Export PNG"
-
-#### Output
-
--   File: `my-ideal-laptop-cover.png`
-
-Includes: - Background (#F6F7F9)\
-- Laptop body\
-- Screen content (stickers)
+-   Background → flat\
+-   Laptop → medium elevation\
+-   Stickers → high elevation when active\
+-   UI → floating glass layer
 
 ------------------------------------------------------------------------
 
-### 5.2 Rendering Pipeline
+### Shadows
 
-Use offscreen canvas.
-
-#### Steps
-
-1.  Create canvas at 2x resolution\
-2.  Scale context\
-3.  Draw background\
-4.  Draw laptop mock\
-5.  Draw each sticker:
-    -   Apply translation\
-    -   Apply rotation\
-    -   Draw SVG\
-6.  Export
+-   Laptop: strong base shadow\
+-   Stickers: dynamic shadow based on state\
+-   UI: soft ambient shadow
 
 ------------------------------------------------------------------------
 
-### 5.3 Export Implementation
+## 9. Interaction Rules
 
-Preferred:
-
-``` ts
-canvas.toBlob()
-```
-
-Fallback:
-
-``` ts
-canvas.toDataURL("image/png")
-```
+-   Drag only valid on laptop\
+-   Drop outside cancels\
+-   Movement clamps to bounds\
+-   Rotation cannot push outside
 
 ------------------------------------------------------------------------
 
-### 5.4 Download Flow
+## 10. Edge Cases
 
--   Create temporary `<a>`\
--   Assign object URL\
--   Set `download` attribute\
--   Trigger click\
--   Revoke object URL
+-   Empty canvas export works\
+-   Many stickers remain performant\
+-   Resize clamps correctly
 
 ------------------------------------------------------------------------
 
-### 5.5 Clipboard (Optional)
+## 11. Future Enhancements
 
-Feature: "Copy PNG to clipboard"
-
--   Use Clipboard API\
--   Hide if unsupported
-
-------------------------------------------------------------------------
-
-## 6. Layout
-
-### 6.1 Global
-
--   Background: #F6F7F9\
--   Soft shadows\
--   Rounded corners\
--   Consistent spacing
+-   Custom uploads\
+-   Sticker marketplace\
+-   Collections system\
+-   Shareable layouts\
+-   Mobile gestures
 
 ------------------------------------------------------------------------
 
-### 6.2 Sidebar
+## 12. Success Criteria
 
-Width: \~320px
-
-Sections: - Title\
-- Search\
-- Categories\
-- Sticker grid
-
-------------------------------------------------------------------------
-
-### 6.3 Main Stage
-
--   Centered MacBook mock\
--   Screen clearly defined\
--   Highlight on drag-over
-
-------------------------------------------------------------------------
-
-### 6.4 Top Bar
-
-Actions:
-
--   Save\
--   Export PNG\
--   Copy PNG (optional)
-
-------------------------------------------------------------------------
-
-## 7. Interaction Rules
-
-### Drag & Drop
-
--   Only valid inside screen\
--   Highlight screen on drag-over\
--   Cancel on invalid drop
-
-------------------------------------------------------------------------
-
-### Movement
-
--   Clamp position inside bounds\
--   Prevent overflow
-
-------------------------------------------------------------------------
-
-### Resize
-
--   Maintain aspect ratio\
--   Clamp min/max size\
--   Adjust position if near edge
-
-------------------------------------------------------------------------
-
-### Rotation
-
--   Free rotation\
--   Snap to 15° when Shift held
-
-------------------------------------------------------------------------
-
-### Selection
-
--   Click selects\
--   Click outside deselects
-
-------------------------------------------------------------------------
-
-## 8. Technical Considerations
-
-### Rendering Strategy
-
--   DOM elements for interaction\
--   Canvas only for export
-
-------------------------------------------------------------------------
-
-### Performance
-
--   Max \~50 stickers\
--   Use transform instead of layout\
--   Avoid re-renders
-
-------------------------------------------------------------------------
-
-### Asset Safety
-
--   Inline SVG only\
--   Avoid cross-origin images
-
-------------------------------------------------------------------------
-
-### Event System
-
--   Pointer events (not mouse events)\
--   Support future touch gestures
-
-------------------------------------------------------------------------
-
-## 9. Edge Cases
-
--   Empty canvas export still works\
--   Resize near edges clamps properly\
--   Rotation does not break bounds\
--   Large sticker count remains stable
-
-------------------------------------------------------------------------
-
-## 10. Future Enhancements
-
--   Upload custom stickers\
--   Sticker packs marketplace\
--   Shareable URL state\
--   Mobile touch gestures\
--   Snap-to-grid toggle\
--   Undo / redo system
-
-------------------------------------------------------------------------
-
-## 11. Success Criteria
-
--   User places stickers within 10 seconds\
--   Export is sharp and accurate\
--   Save and restore works reliably\
--   No UI breaking across common screen sizes
-
-------------------------------------------------------------------------
-
-## 12. Non-Goals (For Now)
-
--   No backend storage\
--   No authentication\
--   No real-time collaboration\
--   No mobile-first optimization (desktop priority first)
+-   User can drag sticker within 3 seconds\
+-   Interaction feels physical\
+-   Export is high quality\
+-   UI never competes with canvas
