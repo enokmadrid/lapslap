@@ -43,7 +43,7 @@
   --radius-full: 9999px;
 
   /* ---- Shadows ---- */
-  --shadow-laptop: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --shadow-laptop: 25px 25px 100px 0px black, 25px 25px 50px 0px rgba(0,0,0,0.7);
   --shadow-glass: 0 4px 24px rgba(0, 0, 0, 0.2);
   --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-sticker-idle: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -88,7 +88,8 @@
   /* ---- Laptop Dimensions ---- */
   --laptop-width: 896px;
   --laptop-height: 550px;
-  --canvas-inset: 0px;
+  --laptop-radius: 30px;
+  --canvas-inset: 12px;
 
   /* ---- Glass Blur ---- */
   --blur-glass: blur(16px);
