@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { X, Search as SearchIcon, Sticker } from 'lucide-react';
 import { CATEGORIES, STICKERS } from '@/lib/constants';
 import styles from './ExpandedTray.module.css';
 
@@ -58,20 +59,28 @@ export default function ExpandedTray({ isOpen, onClose, onStickerDragStart }) {
           >
             {/* Header */}
             <div className={styles.header}>
-              <span className={styles.headerTitle}>🦞 Sticker Library</span>
-              <button className={styles.closeButton} onClick={onClose}>✕</button>
+              <span className={styles.headerTitle}>
+                <Sticker size={20} style={{ marginRight: 8 }} />
+                Sticker Library
+              </span>
+              <button className={styles.closeButton} onClick={onClose} title="Close window">
+                <X size={20} />
+              </button>
             </div>
 
             {/* Search */}
             <div className={styles.searchRow}>
-              <input
-                className={styles.searchInput}
-                type="text"
-                placeholder="Search stickers..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                autoFocus
-              />
+              <div className={styles.searchContainer}>
+                <SearchIcon size={16} className={styles.searchIcon} />
+                <input
+                  className={styles.searchInput}
+                  type="text"
+                  placeholder="Search stickers..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
+                />
+              </div>
             </div>
 
             {/* Categories */}

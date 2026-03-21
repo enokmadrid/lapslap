@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Maximize2, Upload } from 'lucide-react';
 import { CATEGORIES, STICKERS } from '@/lib/constants';
 import styles from './StickerTray.module.css';
 
@@ -34,7 +35,7 @@ export default function StickerTray({ onStickerDragStart, onExpand }) {
           onClick={onExpand}
           title="Expand sticker tray"
         >
-          ↗
+          <Maximize2 size={16} />
         </button>
       </div>
 
@@ -60,7 +61,9 @@ export default function StickerTray({ onStickerDragStart, onExpand }) {
 
         {/* Upload tile */}
         <button className={styles.uploadTile} title="Upload custom sticker">
-          <span className={styles.uploadIcon}>📤</span>
+          <span className={styles.uploadIcon}>
+            <Upload size={20} />
+          </span>
           <span>Upload</span>
         </button>
       </div>

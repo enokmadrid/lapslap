@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { ArrowUp, ArrowDown, Copy, Trash2 } from 'lucide-react';
 import useCanvasStore from '@/hooks/useCanvasStore';
 import styles from './FloatingToolbar.module.css';
 
@@ -31,14 +32,14 @@ export default function FloatingToolbar({ sticker, canvasRect }) {
         onClick={() => bringForward(sticker.id)}
         title="Bring Forward"
       >
-        ↑
+        <ArrowUp size={16} />
       </button>
       <button
         className={styles.action}
         onClick={() => sendBackward(sticker.id)}
         title="Send Backward"
       >
-        ↓
+        <ArrowDown size={16} />
       </button>
 
       <div className={styles.divider} />
@@ -48,14 +49,14 @@ export default function FloatingToolbar({ sticker, canvasRect }) {
         onClick={() => duplicateSticker(sticker.id)}
         title="Duplicate"
       >
-        ⧉
+        <Copy size={16} />
       </button>
       <button
         className={`${styles.action} ${styles.deleteAction}`}
         onClick={() => removeSticker(sticker.id)}
         title="Delete"
       >
-        🗑
+        <Trash2 size={16} />
       </button>
     </motion.div>
   );
