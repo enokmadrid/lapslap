@@ -1,0 +1,157 @@
+.tray {
+  position: fixed;
+  bottom: 0;
+  left: var(--space-2);
+  right: var(--space-2);
+  z-index: var(--z-tray);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Header row: category tabs + expand button */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.categories {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  overflow-x: auto;
+  flex: 1;
+  scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  flex-shrink: 0;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  white-space: nowrap;
+}
+
+.chipDefault {
+  background: transparent;
+  color: var(--color-text-secondary);
+}
+
+.chipDefault:hover {
+  background: var(--color-glass-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.chipActive {
+  background: var(--color-text-primary);
+  color: var(--color-bg-primary);
+}
+
+.expandButton {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-glass-border);
+  background: var(--color-glass-bg);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.expandButton:hover {
+  background: var(--color-glass-bg-hover);
+  color: var(--color-text-primary);
+}
+
+/* Sticker rail */
+.stickerRail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: var(--space-1);
+}
+
+.stickerRail::-webkit-scrollbar {
+  display: none;
+}
+
+.stickerThumb {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: var(--radius-md);
+  background: var(--color-glass-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  overflow: hidden;
+  transition: transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.stickerThumb:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: var(--shadow-sticker-hover);
+}
+
+.stickerThumb:active {
+  cursor: grabbing;
+}
+
+.stickerThumbImage {
+  max-width: 85%;
+  max-height: 85%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.uploadTile {
+  flex-shrink: 0;
+  width: 107px;
+  height: 100px;
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--color-glass-border);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.uploadTile:hover {
+  border-color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  background: var(--color-glass-bg);
+}
+
+.uploadIcon {
+  font-size: 1.2rem;
+}

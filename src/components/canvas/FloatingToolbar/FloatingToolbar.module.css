@@ -1,0 +1,47 @@
+.toolbar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-radius: var(--radius-full);
+  background: rgba(20, 10, 40, 0.92);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--color-glass-border-strong);
+  box-shadow: var(--shadow-toolbar);
+  pointer-events: auto;
+  z-index: 100;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.action:hover {
+  background: var(--color-glass-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-glass-border);
+  margin: 0 var(--space-1);
+}
+
+.deleteAction:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}

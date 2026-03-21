@@ -1,0 +1,87 @@
+.nav {
+  position: fixed;
+  top: var(--space-2);
+  left: var(--space-2);
+  right: var(--space-2);
+  z-index: var(--z-nav);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  height: 48px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+  text-decoration: none;
+  border: none;
+  background: none;
+}
+
+.navLink:hover {
+  color: var(--color-text-primary);
+  background: var(--color-glass-bg-hover);
+}
+
+.navLinkActive {
+  color: var(--color-text-primary);
+  background: var(--color-glass-bg-hover);
+}
+
+.navIcon {
+  font-size: var(--font-size-md);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.profileButton {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+.profileButton:hover {
+  background: var(--color-glass-bg-hover);
+}
