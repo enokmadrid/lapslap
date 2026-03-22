@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useCallback, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useRef, useCallback, useState, useEffect } from 'react';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import useCanvasStore from '@/hooks/useCanvasStore';
 import { clampToCanvas } from '@/lib/bounds';
 import { STICKER_DEFAULTS } from '@/lib/constants';
@@ -22,6 +22,33 @@ export default function PlacedSticker({ sticker, canvasRect }) {
   } = useCanvasStore();
 
   const isSelected = selectedStickerId === sticker.id;
+  const liftControls = useAnimation();
+
+  // Trigger 3D peel-lift when sticker becomes selected
+  useEffect(() => {
+    if (isSelected) {
+      liftControls.start({
+        // Left edge lifts first → whole sticker settles lifted
+        rotateY: [0, -12, -6, 0],
+        rotateX: [0, 4, 2, 0],
+        scale: [1, 1.04, 1.06, 1.05],
+        y: [0, -3, -5, -4],
+        transition: {
+          duration: 0.5,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          times: [0, 0.3, 0.7, 1],
+        },
+      });
+    } else {
+      liftControls.start({
+        rotateY: 0,
+        rotateX: 0,
+        scale: 1,
+        y: 0,
+        transition: { duration: 0.2, ease: 'easeOut' },
+      });
+    }
+  }, [isSelected, liftControls]);
 
   // ---- Drag on canvas ----
   const handlePointerDown = useCallback((e) => {
@@ -157,32 +184,36 @@ export default function PlacedSticker({ sticker, canvasRect }) {
         height: sticker.height,
         zIndex: sticker.zIndex,
         rotate: sticker.rotation,
+        perspective: 600,
       }}
       initial={{ scale: 0.6, opacity: 0, y: 20 }}
-      animate={{
-        scale: isSelected ? 1.05 : 1,
-        opacity: 1,
-        y: isSelected ? -4 : 0,
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 400,
-        damping: 25,
-      }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 28 }}
       onPointerDown={handlePointerDown}
     >
-      {/* Sticker image */}
-      <motion.img
-        src={sticker.src}
-        alt={sticker.name}
-        className={styles.stickerImage}
-        draggable={false}
-        animate={{
-          filter: isSelected
-            ? 'drop-shadow(0px 12px 24px rgba(0,0,0,0.35))'
-            : 'drop-shadow(0px 2px 6px rgba(0,0,0,0.15))'
+      {/* Inner wrapper — 3D peel tilt + lift */}
+      <motion.div
+        style={{
+          width: '100%',
+          height: '100%',
+          transformOrigin: 'right center',
+          transformStyle: 'preserve-3d',
         }}
-      />
+        animate={liftControls}
+      >
+        {/* Sticker image */}
+        <motion.img
+          src={sticker.src}
+          alt={sticker.name}
+          className={styles.stickerImage}
+          draggable={false}
+          animate={{
+            filter: isSelected
+              ? 'drop-shadow(0px 14px 28px rgba(0,0,0,0.4))'
+              : 'drop-shadow(0px 2px 6px rgba(0,0,0,0.15))',
+          }}
+          transition={{ filter: { duration: 0.3 } }}
+        />
 
       {/* Ripple effect on tap */}
       <div className={styles.rippleContainer}>
@@ -265,6 +296,7 @@ export default function PlacedSticker({ sticker, canvasRect }) {
           </>
         )}
       </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 }
