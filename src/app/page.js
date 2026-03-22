@@ -12,7 +12,7 @@ import Toast from '@/components/ui/Toast/Toast';
 import useCanvasStore from '@/hooks/useCanvasStore';
 import { isPointInRect } from '@/lib/bounds';
 import { STORAGE_KEY } from '@/lib/constants';
-import { initSharedAudio, playStickerSound } from '@/lib/audio';
+import { initSharedAudio, playStickerSound, playSlapSound } from '@/lib/audio';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -158,6 +158,7 @@ export default function Home() {
             Math.max(0, Math.min(dropX, canvasRect.width - 120)),
             Math.max(0, Math.min(dropY, canvasRect.height - 120))
           );
+          playSlapSound();
         }
       }
       setGhostSticker(null);
